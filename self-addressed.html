@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>selfAddressed</title>
+    <style>
+      header {
+        display: flex;
+        align-items: baseline;
+      }
+      header h2 {
+        display: flex;
+        flex: 2;
+        margin: 0;
+      }
+      header span {
+        flex: 2;
+        text-align: right;
+      }
+    </style>
+    <script src="https://unpkg.com/self-addressed@0.3.0/dist/self-addressed.js"></script>
+  </head>
+  <body>
+    <section id="self-addressed">
+      <header>
+        <h2>selfAddressed</h2>
+        <span>
+          <a
+            target="_blank"
+            href="https://unpkg.com/browse/self-addressed@0.3.0/dist/"
+            >unpkg.com</a
+          >
+          <a target="_blank" href="https://github.com/bahmutov/self-addressed"
+            >github</a
+          >
+        </span>
+      </header>
+      <p>The interesting part of this demo is in the browser's console.</p>
+      <iframe
+        src="https://wisteria-wind-worm.glitch.me/self-addressed-child.html"
+      >
+      </iframe>
+      <script>
+        console.log("Lilac is loading self-addressed.html");
+        selfAddressed.options.verbose = true;
+
+        function mailman(address, msg) {
+          address.postMessage(msg, "*");
+        }
+
+        window.onmessage = function (event) {
+          console.log("Lilac self-addressed.html got a message: ", event.data);
+          var letter = selfAddressed(event.data);
+          console.log(
+            "Lilac self-addressed—that message includes this letter:",
+            letter
+          );
+          var returnAddress = event.source;
+          // put new letter into the same envelope
+          selfAddressed(event.data, "bar");
+          selfAddressed(mailman, returnAddress, event.data);
+        };
+      </script>
+    </section>
+  </body>
+</html>
